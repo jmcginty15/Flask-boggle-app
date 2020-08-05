@@ -1,0 +1,27 @@
+{% extends 'base.html' %}
+{% block title %}Boggle!{% endblock %}
+
+{% block content %}
+<div id="container">
+    <table id="board">
+        {% for row in board %}
+        <tr>
+            {% for col in row %}
+            <td class="cell">{{ col }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </table>
+    <div id="form-wrapper">
+        <form href="/" id="word-form">
+            <label for="word">Enter a word: </label>
+            <input type="text" name="word" id="word">
+            <button type="submit">Go!</button>
+        </form>
+        <p id="result"></p>
+    </div>
+    <div id="info">
+        <h3><span id="timer">1:00</span> Player score: <span id="score">0</span></h3>
+    </div>
+</div>
+{% endblock %}
