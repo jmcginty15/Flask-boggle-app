@@ -3,6 +3,9 @@ const $wordInput = $('#word')
 const $resultField = $('#result')
 const $scoreField = $('#score')
 const $timer = $('#timer')
+const $finalScore = $('#final-score')
+const $gameOver = $('#game-over')
+const $highScoreAlert = $('#high-score-alert')
 
 const BASE_URL = 'http://127.0.0.1:5000'
 let totalScore = 0
@@ -15,8 +18,9 @@ $form.on('submit', async function (evt) {
     evt.preventDefault()
     if (!gameOver) {
         const word = $wordInput.val()
+        $wordInput.val('')
         const score = word.length
-        const response = await axios.post(`${BASE_URL}/guess`, null, { params: { word: word } })
+        const response = await axios.get(`${BASE_URL}/guess`, { params: { key: word } })
         const result = response.data.result
         const validWord = displayResult(result, word, score)
         if (validWord) { addScore(score) }
@@ -64,7 +68,10 @@ function timer() {
 // this function will be called when the timer reaches zero
 // it will display a Game Over message along with the player's final score
 // it will also prevent any further guesses from being entered using the gameOver variable
-function endGame() {
+async function endGame() {
     gameOver = true
-
+    $finalScore.text(totalScore)
+    const newHighScore = false // this will be a get request to the server to see if a new high score has been set
+    if (newHighScore) { $highScoreAlert.css('display', 'block') }
+    $gameOver.css('display', 'inline-block')
 }

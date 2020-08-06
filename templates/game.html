@@ -3,15 +3,17 @@
 
 {% block content %}
 <div id="container">
-    <table id="board">
-        {% for row in board %}
-        <tr>
-            {% for col in row %}
-            <td class="cell">{{ col }}</td>
+    <div>
+        <table id="board">
+            {% for row in board %}
+            <tr>
+                {% for col in row %}
+                <td class="cell">{{ col }}</td>
+                {% endfor %}
+            </tr>
             {% endfor %}
-        </tr>
-        {% endfor %}
-    </table>
+        </table>
+    </div>
     <div id="form-wrapper">
         <form href="/" id="word-form">
             <label for="word">Enter a word: </label>
@@ -21,7 +23,19 @@
         <p id="result"></p>
     </div>
     <div id="info">
-        <h3><span id="timer">1:00</span> Player score: <span id="score">0</span></h3>
+        <div id="current-game">
+            <h3><span id="score-label"><b><span id="timer">1:00</span></b> | Player score:</span><span id="score">0</span></h3>
+        </div>
+        <div id="stats">
+            <h3><span id="high-score-label">High score:</span><span id="high-score">0</span></h3>
+            <h3><span id="games-played-label">Games played:</span><span id="games-played">0</span></h3>
+        </div>
+    </div>
+    <div id="game-over">
+        <h2>Game Over!</h2>
+        <h3 id="final-score-container">Your final score is <span id="final-score"></span></h3>
+        <h3 id="high-score-alert">You set a new high score!</h3>
+        <button id="ok">Ok</button><button id="new-game">New game</button>
     </div>
 </div>
 {% endblock %}

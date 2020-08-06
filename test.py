@@ -9,6 +9,7 @@ class FlaskTests(TestCase):
 
     # TODO -- write tests for every view function / feature!
     def test_homepage(self):
+        """Testing home route for status code and included html"""
         with app.test_client() as client:
             res = client.get('/')
             html = res.get_data(as_text=True)
@@ -17,9 +18,14 @@ class FlaskTests(TestCase):
             self.assertIn('<form href="/" id="word-form">', html)
 
     def test_guess(self):
+        """Testing requests to guess route"""
         with app.test_client() as client:
-            res = client.post('/guess', args={'word': 'pasidfjapsdoi'})
+            res = client.get('/guess?key=pasidfjapsdoi')
             text = res.get_data(as_text=True)
-            print(text)
-            
             self.assertEqual(res.status_code, 200)
+            self.assertIn('not-word', text)
+
+            res = client.get('/guess?key=thyroparathyroidectomize')
+            text = res.get_data(as_text=True)
+            self.assertEqual(res.status_code, 200)
+            self.assertIn('not-on-board', text)

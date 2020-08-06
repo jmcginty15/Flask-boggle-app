@@ -46,12 +46,38 @@ table {
     padding: 5px;
     background-color: maroon;
     color: tan;
-    display: block;
-    height: 25px;
-    width: 225px;
+    height: 105px;
+    width: 275px;
     position: absolute;
     top: 0px;
     left: 25px;
+}
+
+#current-game, #stats {
+    border-style: solid;
+    border-radius: 10px;
+    border-color: black;
+    display: block;
+    margin: auto;
+    padding: 5px;
+    background-color: tan;
+    color: maroon;
+    text-align: left;
+}
+
+#score-label, #high-score-label, #games-played-label {
+    display: inline-block;
+    width: 85%;
+}
+
+#score, #high-score, #games-played {
+    display: inline-block;
+    width: 15%;
+    text-align: right;
+}
+
+#stats {
+    margin-top: 5px;
 }
 
 #form-wrapper {
@@ -60,10 +86,10 @@ table {
     border-color: black;
     display: inline-block;
     margin: auto;
+    margin-top: 10px;
     padding: 10px;
     background-color: maroon;
     color: tan;
-    display: block;
 }
 
 #word-form, #result {
@@ -74,6 +100,41 @@ h3 {
     margin: 0px;
 }
 
+h2 {
+    margin-top: 0px;
+}
+
+#final-score-container, #high-score-alert {
+    margin-top: 1em;
+    margin-bottom: 1em;
+}
+
+#high-score-alert {
+    display: none;
+}
+
 #container {
     position: relative;
+}
+
+#game-over {
+    border-style: solid;
+    border-radius: 10px;
+    border-color: black;
+    position: absolute;
+    top: 35%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background-color: maroon;
+    color: tan;
+    display: none;
+    padding: 15px;
+}
+
+#ok {
+    float: left;
+}
+
+#new-game {
+    float: right;
 }
