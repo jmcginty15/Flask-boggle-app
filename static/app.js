@@ -6,10 +6,36 @@ const $timer = $('#timer')
 const $finalScore = $('#final-score')
 const $gameOver = $('#game-over')
 const $highScoreAlert = $('#high-score-alert')
+const $highScore = $('#high-score')
+const $gamesPlayed = $('#games-played')
+const $endGameOk = $('#ok')
+const $startGame = $('#start-game')
+const $newGame = $('#new-game')
+const $homeCard = $('#home-card')
+const $board = $('#board')
+const $formWrapper = $('#form-wrapper')
 
 const BASE_URL = 'http://127.0.0.1:5000'
 let totalScore = 0
 let gameOver = false
+let time = 60
+let timing = 0
+
+// event listeners for new game and start game buttons
+$startGame.on('click', startGame)
+$newGame.on('click', function () {
+    startGame()
+})
+
+// this function starts the game and will be called by an event listener on a button click
+function startGame () {
+    gameOver = false
+    $board.css('display', 'inline-block')
+    $homeCard.css('display', 'none')
+    $formWrapper.css('display', 'inline-block')
+    $gameOver.css('display', 'none')
+    startTimer()
+}
 
 // this function "submits" the form without actually submitting the form
 // it will prevent the form itself from making a post request and instead make the post request manually through axios
@@ -20,7 +46,7 @@ $form.on('submit', async function (evt) {
         const word = $wordInput.val()
         $wordInput.val('')
         const score = word.length
-        const response = await axios.get(`${BASE_URL}/guess`, { params: { key: word } })
+        const response = await axios.get(`${BASE_URL}/guess`, { params: { word: word } })
         const result = response.data.result
         const validWord = displayResult(result, word, score)
         if (validWord) { addScore(score) }
@@ -34,10 +60,10 @@ function displayResult(result, word, score) {
         $resultField.html(`Correct! <b>${word.toUpperCase()}</b> is worth ${score} points!`)
         return true
     } else if (result == 'not-word') {
-        $resultField.html(`Invalid guess! <b>${word.toUpperCase()}</b> is not in the dictionary!`)
+        $resultField.html(`<b>${word.toUpperCase()}</b> is not in the dictionary!`)
         return false
     } else if (result == 'not-on-board') {
-        $resultField.html(`Invalid guess! <b>${word.toUpperCase()}</b> is not on the board!`)
+        $resultField.html(`<b>${word.toUpperCase()}</b> is not on the board!`)
         return false
     }
 }
@@ -49,8 +75,12 @@ function addScore(score) {
     $scoreField.text(totalScore)
 }
 
-let time = 60
-let timing = setInterval(timer, 1000)
+// this function starts the timer at the beginning of the game
+function startTimer() {
+    $timer.text('1:00')
+    time = 60
+    timing = setInterval(timer, 1000)
+}
 
 // this function will be called by setInterval
 // it will count down to zero from 1 minute, after which the game will be over
@@ -71,7 +101,17 @@ function timer() {
 async function endGame() {
     gameOver = true
     $finalScore.text(totalScore)
-    const newHighScore = false // this will be a get request to the server to see if a new high score has been set
-    if (newHighScore) { $highScoreAlert.css('display', 'block') }
+    const response = await axios.get(`${BASE_URL}/game-over`, { params: { score: totalScore } })
+    const newHighScore = response.data.new_high_score
+    const gamesPlayed = response.data.games_played
+    if (newHighScore) {
+        $highScoreAlert.css('display', 'block')
+        $highScore.text(totalScore)
+    }
+    $gamesPlayed.text(gamesPlayed)
     $gameOver.css('display', 'inline-block')
 }
+
+$endGameOk.on('click', async function () {
+    await axios.get(`${BASE_URL}/`)
+})

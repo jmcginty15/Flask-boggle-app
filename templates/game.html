@@ -4,6 +4,10 @@
 {% block content %}
 <div id="container">
     <div>
+        <div id="home-card">
+            <h3>Welcome to Boggle!</h3>
+            <button id="start-game">Start game</button>
+        </div>
         <table id="board">
             {% for row in board %}
             <tr>
@@ -24,11 +28,12 @@
     </div>
     <div id="info">
         <div id="current-game">
-            <h3><span id="score-label"><b><span id="timer">1:00</span></b> | Player score:</span><span id="score">0</span></h3>
+            <h3><span id="score-label"><b><span id="timer">1:00</span></b> | Player score:</span><span
+                    id="score">0</span></h3>
         </div>
         <div id="stats">
-            <h3><span id="high-score-label">High score:</span><span id="high-score">0</span></h3>
-            <h3><span id="games-played-label">Games played:</span><span id="games-played">0</span></h3>
+            <h3><span id="high-score-label">High score:</span><span id="high-score">{{ high_score }}</span></h3>
+            <h3><span id="games-played-label">Games played:</span><span id="games-played">{{ games_played }}</span></h3>
         </div>
     </div>
     <div id="game-over">

@@ -20,12 +20,15 @@ class FlaskTests(TestCase):
     def test_guess(self):
         """Testing requests to guess route"""
         with app.test_client() as client:
-            res = client.get('/guess?key=pasidfjapsdoi')
+            res = client.get('/guess?word=pasidfjapsdoi')
             text = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
             self.assertIn('not-word', text)
 
-            res = client.get('/guess?key=thyroparathyroidectomize')
+            res = client.get('/guess?word=thyroparathyroidectomize')
             text = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
             self.assertIn('not-on-board', text)
+
+            # add another test for a word that is on the board
+            # will need to figure out a way to set the board within the test first
