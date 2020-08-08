@@ -10,7 +10,6 @@ const $highScore = $('#high-score')
 const $gamesPlayed = $('#games-played')
 const $endGameOk = $('#ok')
 const $startGame = $('#start-game')
-const $newGame = $('#new-game')
 const $homeCard = $('#home-card')
 const $board = $('#board')
 const $formWrapper = $('#form-wrapper')
@@ -20,16 +19,15 @@ let totalScore = 0
 let gameOver = false
 let time = 60
 let timing = 0
+let guessedWords = []
 
 // event listeners for new game and start game buttons
 $startGame.on('click', startGame)
-$newGame.on('click', function () {
-    startGame()
-})
 
 // this function starts the game and will be called by an event listener on a button click
-function startGame () {
+function startGame() {
     gameOver = false
+    guessedWords = []
     $board.css('display', 'inline-block')
     $homeCard.css('display', 'none')
     $formWrapper.css('display', 'inline-block')
@@ -49,7 +47,10 @@ $form.on('submit', async function (evt) {
         const response = await axios.get(`${BASE_URL}/guess`, { params: { word: word } })
         const result = response.data.result
         const validWord = displayResult(result, word, score)
-        if (validWord) { addScore(score) }
+        if (validWord) {
+            addScore(score)
+            guessedWords.push(word)
+        }
     }
 })
 
@@ -57,8 +58,13 @@ $form.on('submit', async function (evt) {
 // returns true if word is valid, false if word is not valid
 function displayResult(result, word, score) {
     if (result == 'ok') {
-        $resultField.html(`Correct! <b>${word.toUpperCase()}</b> is worth ${score} points!`)
-        return true
+        if (guessedWords.includes(word)) {
+            $resultField.html(`<b>${word.toUpperCase()}</b> has already been guessed!`)
+            return false
+        } else {
+            $resultField.html(`Correct! <b>${word.toUpperCase()}</b> is worth ${score} points!`)
+            return true
+        }
     } else if (result == 'not-word') {
         $resultField.html(`<b>${word.toUpperCase()}</b> is not in the dictionary!`)
         return false

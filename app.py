@@ -16,12 +16,13 @@ games_played = 0
 @app.route('/')
 def game():
     """Displays the home page"""
+    global board
     global high_score
     global games_played
     session['board'] = board
     if session.get('high-score'):
         high_score = session['high-score']
-    if session.get('games_played'):
+    if session.get('games-played'):
         games_played = session['games-played']
     return render_template('game.html', board=board, size=len(board), high_score=high_score, games_played=games_played)
 
@@ -50,6 +51,13 @@ def game_over():
         session['high-score'] = high_score
         new_high_score = True
     return jsonify({'new_high_score': new_high_score, 'games_played': games_played})
+
+@app.route('/new-game')
+def reset_game():
+    """Creates a new board and redirects to the home page"""
+    global board
+    board = boggle_game.make_board()
+    return redirect('/')
 
 def check_high_score(score, high_score):
     """Checks if a new high score has been set
