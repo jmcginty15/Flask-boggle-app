@@ -20,7 +20,7 @@ class FlaskTests(TestCase):
 
     def test_guess(self):
         """Testing requests to guess route"""
-        with app.test_client() as client:
+        with app.test_client() as client:            
             res = client.get('/guess?word=pasidfjapsdoi')
             text = res.get_data(as_text=True)
             self.assertEqual(res.status_code, 200)
@@ -48,3 +48,9 @@ class FlaskTests(TestCase):
             data = loads(res.get_data(as_text=True))
             self.assertEqual(data['new_high_score'], False)
             self.assertEqual(data['games_played'], 2)
+    
+    def test_new_game(self):
+        """Testing new_game route"""
+        with app.test_client() as client:
+            res = client.get('/new-game')
+            self.assertEqual(res.status_code, 302)
